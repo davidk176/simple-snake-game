@@ -1,2 +1,2 @@
 # simple-snake-game
-hello-world
+Ein einfaches Snake Spiel in Python.
