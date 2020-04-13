@@ -11,18 +11,6 @@ class Snake:
     def get_body(self):
         return self.body
     
-    def moveRight(self):
-        self.x = self.x + self.speed
-        
-    def moveLeft(self):
-        self.x = self.x - self.speed
-        
-    def moveUp(self):
-        self.y = self.y + self.speed
-        
-    def moveDown(self):
-        self.y = self.y -self.speed
-        
     def change_direction(self):
         if self.change_to == 'RIGHT' and self.direction != 'LEFT':
             self.direction = 'RIGHT'
@@ -33,15 +21,15 @@ class Snake:
         if self.change_to == 'UP' and self.direction != 'DOWN':
             self.direction = 'UP'
             
-    def move(self, has_eaten):
+    def move(self, has_eaten, x, y):
         if self.direction == 'UP':
-            self.head[1] -= 10
+            self.head[1] = (self.head[1] - 10) % y
         if self.direction == 'DOWN':
-            self.head[1] += 10
+            self.head[1] = (self.head[1] + 10) % y
         if self.direction == 'RIGHT':
-            self.head[0] += 10
+            self.head[0] = (self.head[0] + 10) % x
         if self.direction == 'LEFT':
-            self.head[0] -= 10
+            self.head[0] = (self.head[0] - 10) % x
             
         self.body.insert(0,list(self.head))
         if not has_eaten:
@@ -109,10 +97,6 @@ class Game:
     
     has_eaten = False
     
-    def get_Frame_Size(self):
-        return [frame_size_x, frame_size_y]
-    
-        
     #Start Game logic with init     
     check_errors = pygame.init()
     if check_errors[1] > 0:
@@ -149,7 +133,7 @@ class Game:
         
         has_eaten = snake.eat(food)
         #move snake
-        snake.move(has_eaten)
+        snake.move(has_eaten, frame_size_x, frame_size_y)
         #spawn food
         food.spawn(frame_size_x, frame_size_y, snake)
         #check if snake eats body
