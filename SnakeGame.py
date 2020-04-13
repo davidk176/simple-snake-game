@@ -1,4 +1,4 @@
-
+#Simple Snake Game
 import pygame, sys, random, time
 
 class Snake:
@@ -160,3 +160,4 @@ class Game:
         
         pygame.display.update()
         fps_controller.tick(snake.speed)
+
