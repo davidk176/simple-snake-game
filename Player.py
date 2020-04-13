@@ -33,7 +33,7 @@ class Snake:
         if self.change_to == 'UP' and self.direction != 'DOWN':
             self.direction = 'UP'
             
-    def move(self):
+    def move(self, has_eaten):
         if self.direction == 'UP':
             self.head[1] -= 10
         if self.direction == 'DOWN':
@@ -44,15 +44,40 @@ class Snake:
             self.head[0] -= 10
             
         self.body.insert(0,list(self.head))
-        self.body.pop(len(self.body)-1)[0]
-        print("Moved to: " + self.direction)
+        if not has_eaten:
+            self.body.pop(len(self.body)-1)[0]
+        else:
+            print("Snake has eaten", has_eaten)
+       # print("Moved to: " + self.direction)
+        
+    def eat(self, food):
+        for fruit in food.elements:
+            if self.head[0] == fruit[0] and self.head[1] == fruit[1]:
+                print("head[0]",self.head[0])
+                print("fruit[0]",fruit[0])
+                food.elements.remove(fruit)
+                print("Snake eats food")
+                return True
+        return False
+                
+            
         
 class Food:
     elements = list()
+    amount = 10
     
-    def __init__(self):
+    def __init__(self, frame_size_x, frame_size_y, amount):
         #generate random food
-        self.elements = [[300,400],[200,300],[10,10]]
+        self.amount = amount
+        i=0
+        
+        while i < amount:
+            x = (random.randrange(1, frame_size_x)//10)*10
+            y = (random.randrange(1, frame_size_y)//10)*10
+
+            if [x, y] not in self.elements:
+                self.elements.append([x,y])
+                i+=1
         
     def spawn(self, frame_size_x, frame_size_y, snake):
         x = random.randrange(1, frame_size_x)
@@ -73,11 +98,14 @@ class Game:
     red = pygame.Color(255,0,0)
     
     #Game objects
-    food = Food()
+    food = Food(frame_size_x, frame_size_y, 2)
     snake = Snake()
+    
+    has_eaten = False
     
     def get_Frame_Size(self):
         return [frame_size_x, frame_size_y]
+    
         
     #Start Game logic with init     
     check_errors = pygame.init()
@@ -112,16 +140,17 @@ class Game:
                     pygame.event.post(pygame.event.Event(pygame.QUIT))
         #change direction of snake
         snake.change_direction()
+        
+        has_eaten = snake.eat(food)
         #move snake
-        snake.move()
+        snake.move(has_eaten)
         #spawn food
-        food.spawn(frame_size_x, frame_size_y, snake)
+       # food.spawn(frame_size_x, frame_size_y, snake)
         game_window.fill(black)
+        
         #Draw Snake
         for pos in snake.body:
         # Snake body
-        # .draw.rect(play_surface, color, xy-coordinate)
-        # xy-coordinate -> .Rect(x, y, size_x, size_y)
             pygame.draw.rect(game_window, green, pygame.Rect(pos[0], pos[1], 10, 10))
         
         #Draw Food
