@@ -57,7 +57,8 @@ class Food:
     def spawn(self, frame_size_x, frame_size_y, snake):
         x = random.randrange(1, frame_size_x)
         y = random.randrange(1, frame_size_y)
-        if x in snake.get_body()
+        
+        if [x,y] not in snake.get_body():
             self.elements.append([x, y])
         
   
