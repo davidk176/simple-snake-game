@@ -1,2 +1,2 @@
 # simple-snake-game
-Ein einfaches Snake Spiel in Python.
+A very simple snake game. Writte in python, used pygame.
