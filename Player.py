@@ -1,5 +1,5 @@
 
-import pygame, sys
+import pygame, sys, random
 
 class Snake:
     head = [100, 50]
@@ -8,6 +8,8 @@ class Snake:
     direction = 'RIGHT'
     change_to = 'RIGHT'
     
+    def get_body(self):
+        return self.body
     
     def moveRight(self):
         self.x = self.x + self.speed
@@ -46,11 +48,18 @@ class Snake:
         print("Moved to: " + self.direction)
         
 class Food:
-    position = [[300,400],[200,300],[10,10]]
+    elements = list()
     
     def __init__(self):
         #generate random food
-        position = [[300,400],[200,300],[10,10]]
+        self.elements = [[300,400],[200,300],[10,10]]
+        
+    def spawn(self, frame_size_x, frame_size_y, snake):
+        x = random.randrange(1, frame_size_x)
+        y = random.randrange(1, frame_size_y)
+        if x in snake.get_body()
+            self.elements.append([x, y])
+        
   
 class Game:
     frame_size_x=1048
@@ -59,9 +68,11 @@ class Game:
     green = pygame.Color(0,255,0)
     black = pygame.Color(0,0,0)
     red = pygame.Color(255,0,0)
-    food = Food
+    food = Food()
     
-    
+    def get_Frame_Size(self):
+        print("")
+        
     #Do init      
     check_errors = pygame.init()
     if check_errors[1] > 0:
@@ -70,7 +81,7 @@ class Game:
     else:
         print('[+] Game successfully initialised')
     
-    pygame.display.set_caption('Snake Eater')
+    pygame.display.set_caption('Snake Game')
     game_window = pygame.display.set_mode((frame_size_x, frame_size_y))
     fps_controller = pygame.time.Clock()
     
@@ -96,6 +107,7 @@ class Game:
                     
         snake.change_direction()
         snake.move()
+        food.spawn(frame_size_x, frame_size_y, snake)
         game_window.fill(black)
         #Draw Snake
         for pos in snake.body:
@@ -103,8 +115,11 @@ class Game:
         # .draw.rect(play_surface, color, xy-coordinate)
         # xy-coordinate -> .Rect(x, y, size_x, size_y)
             pygame.draw.rect(game_window, green, pygame.Rect(pos[0], pos[1], 10, 10))
+        
+        #Draw Food
+        for e in food.elements:
+            pygame.draw.rect(game_window, red, pygame.Rect(e[0], e[1], 10, 10))
             
-        for fruit in food.position:
-            pygame.draw.rect(game_window, red, pygame.Rect(fruit[0], fruit[1], 10, 10))
+        
         pygame.display.update()
         fps_controller.tick(snake.speed)
