@@ -4,7 +4,7 @@ import pygame, sys, random
 class Snake:
     head = [100, 50]
     body = [[100,50],[90,50],[80,50]]
-    speed = 10
+    speed = 15
     direction = 'RIGHT'
     change_to = 'RIGHT'
     
@@ -64,7 +64,7 @@ class Snake:
         
 class Food:
     elements = list()
-    amount = 10
+    amount = 1
     
     def __init__(self, frame_size_x, frame_size_y, amount):
         #generate random food
@@ -83,7 +83,7 @@ class Food:
         x = random.randrange(1, frame_size_x)
         y = random.randrange(1, frame_size_y)
         
-        if [x,y] not in snake.get_body():
+        if len(self.elements) < self.amount and [x,y] not in snake.get_body():
             self.elements.append([x, y])
         
   
@@ -98,7 +98,8 @@ class Game:
     red = pygame.Color(255,0,0)
     
     #Game objects
-    food = Food(frame_size_x, frame_size_y, 2)
+    amount_of_food = 10
+    food = Food(frame_size_x, frame_size_y, amount_of_food)
     snake = Snake()
     
     has_eaten = False
@@ -145,7 +146,7 @@ class Game:
         #move snake
         snake.move(has_eaten)
         #spawn food
-       # food.spawn(frame_size_x, frame_size_y, snake)
+        food.spawn(frame_size_x, frame_size_y, snake)
         game_window.fill(black)
         
         #Draw Snake
