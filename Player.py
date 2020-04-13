@@ -4,7 +4,7 @@ import pygame, sys
 class Snake:
     head = [100, 50]
     body = [[100,50],[90,50],[80,50]]
-    speed = 1
+    speed = 10
     direction = 'RIGHT'
     change_to = 'RIGHT'
     
@@ -44,6 +44,13 @@ class Snake:
         self.body.insert(0,list(self.head))
         self.body.pop(len(self.body)-1)[0]
         print("Moved to: " + self.direction)
+        
+class Food:
+    position = [[300,400],[200,300],[10,10]]
+    
+    def __init__(self):
+        #generate random food
+        position = [[300,400],[200,300],[10,10]]
   
 class Game:
     frame_size_x=1048
@@ -51,6 +58,9 @@ class Game:
     snake = Snake()
     green = pygame.Color(0,255,0)
     black = pygame.Color(0,0,0)
+    red = pygame.Color(255,0,0)
+    food = Food
+    
     
     #Do init      
     check_errors = pygame.init()
@@ -87,11 +97,14 @@ class Game:
         snake.change_direction()
         snake.move()
         game_window.fill(black)
+        #Draw Snake
         for pos in snake.body:
         # Snake body
         # .draw.rect(play_surface, color, xy-coordinate)
         # xy-coordinate -> .Rect(x, y, size_x, size_y)
             pygame.draw.rect(game_window, green, pygame.Rect(pos[0], pos[1], 10, 10))
             
+        for fruit in food.position:
+            pygame.draw.rect(game_window, red, pygame.Rect(fruit[0], fruit[1], 10, 10))
         pygame.display.update()
         fps_controller.tick(snake.speed)
