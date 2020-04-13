@@ -30,54 +30,60 @@ class Game:
     game_window = pygame.display.set_mode((frame_size_x, frame_size_y))
     fps_controller = pygame.time.Clock()
     
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-        # on key is pressed down
-            if event.type == pygame.KEYDOWN:
-            #  WASD or arrow keys
-                if event.key == pygame.K_UP or event.key == ord('w'):
-                    snake.change_to = 'UP'
-                if event.key == pygame.K_DOWN or event.key == ord('s'):
-                    snake.change_to = 'DOWN'
-                if event.key == pygame.K_LEFT or event.key == ord('a'):
-                    snake.change_to = 'LEFT'
-                if event.key == pygame.K_RIGHT or event.key == ord('d'):
-                    snake.change_to = 'RIGHT'
-                # Esc -> exit
-                if event.key == pygame.K_ESCAPE:
-                    pygame.event.post(pygame.event.Event(pygame.QUIT))
-        #change direction of snake
-        snake.change_direction()
-        
-        has_eaten = snake.eat(food)
-        #move snake
-        snake.move(has_eaten, frame_size_x, frame_size_y)
-        #spawn food
-        food.spawn(frame_size_x, frame_size_y, snake)
-        #check if snake eats body
-        if snake.check_collision():
-            font = pygame.font.SysFont('times new roman', 90)
-            surface = my_font.render('YOU DIED', True, red)
-            game_over_rect = game_over_surface.get_rect()
-            game_window.fill(black)
-            game_window.blit(game_over_surface, game_over_rect)
-            pygame.display.flip()
-            time.sleep(3)
-            pygame.quit()
-        game_window.fill(black)
-        
-        #Draw Snake
-        for pos in snake.body:
-        # Snake body
-            pygame.draw.rect(game_window, green, pygame.Rect(pos[0], pos[1], 10, 10))
-        
-        #Draw Food
-        for e in food.elements:
-            pygame.draw.rect(game_window, red, pygame.Rect(e[0], e[1], 10, 10))
+    def start_game(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+            # on key is pressed down
+                if event.type == pygame.KEYDOWN:
+                #  WASD or arrow keys
+                    if event.key == pygame.K_UP or event.key == ord('w'):
+                        self.snake.change_to = 'UP'
+                    if event.key == pygame.K_DOWN or event.key == ord('s'):
+                        self.snake.change_to = 'DOWN'
+                    if event.key == pygame.K_LEFT or event.key == ord('a'):
+                        self.snake.change_to = 'LEFT'
+                    if event.key == pygame.K_RIGHT or event.key == ord('d'):
+                        self.snake.change_to = 'RIGHT'
+                    # Esc -> exit
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.event.post(pygame.event.Event(pygame.QUIT))
+            #change direction of snake
+            self.snake.change_direction()
             
-        pygame.display.update()
-        fps_controller.tick(snake.speed)
+            self.has_eaten = self.snake.eat(self.food)
+            #move snake
+            self.snake.move(self.has_eaten, self.frame_size_x, self.frame_size_y)
+            #spawn food
+            self.food.spawn(self.frame_size_x, self.frame_size_y, self.snake)
+            self.game_window.fill(self.black)
+            #check if snake eats body
+            if self.snake.check_collision():
+                font = pygame.font.SysFont('times new roman', 90)
+                surface = font.render('YOU DIED', True, self.red)
+                rect = surface.get_rect()
+                self.game_window.fill(self.black)
+                self.game_window.blit(surface, rect)
+                pygame.display.flip()
+                time.sleep(3)
+                pygame.quit()
+            #Draw Snake
+            for pos in self.snake.body:
+            # Snake body
+                pygame.draw.rect(self.game_window, self.green, pygame.Rect(pos[0], pos[1], 10, 10))
+            
+            #Draw Food
+            for e in self.food.elements:
+                pygame.draw.rect(self.game_window, self.red, pygame.Rect(e[0], e[1], 10, 10))
+                
+            pygame.display.update()
+            self.fps_controller.tick(self.snake.speed)
+    
+    
+if __name__ == "__main__":
+    game= Game()
+    game.start_game()
+    
 
