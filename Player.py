@@ -1,5 +1,5 @@
 
-import pygame, sys, random
+import pygame, sys, random, time
 
 class Snake:
     head = [100, 50]
@@ -60,7 +60,12 @@ class Snake:
                 return True
         return False
                 
-            
+    def check_collision(self):
+        for part in self.body[1:]:
+            if part[0] == self.head[0] and part[1] == self.head[1]:
+                print("Snake eats body")
+                return True
+        return False
         
 class Food:
     elements = list()
@@ -80,8 +85,8 @@ class Food:
                 i+=1
         
     def spawn(self, frame_size_x, frame_size_y, snake):
-        x = random.randrange(1, frame_size_x)
-        y = random.randrange(1, frame_size_y)
+        x = (random.randrange(1, frame_size_x)//10)*10
+        y = (random.randrange(1, frame_size_y)//10)*10
         
         if len(self.elements) < self.amount and [x,y] not in snake.get_body():
             self.elements.append([x, y])
@@ -147,6 +152,16 @@ class Game:
         snake.move(has_eaten)
         #spawn food
         food.spawn(frame_size_x, frame_size_y, snake)
+        #check if snake eats body
+        if snake.check_collision():
+            font = pygame.font.SysFont('times new roman', 90)
+            surface = my_font.render('YOU DIED', True, red)
+            game_over_rect = game_over_surface.get_rect()
+            game_window.fill(black)
+            game_window.blit(game_over_surface, game_over_rect)
+            pygame.display.flip()
+            time.sleep(3)
+            pygame.quit()
         game_window.fill(black)
         
         #Draw Snake
