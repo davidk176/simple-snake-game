@@ -1,5 +1,5 @@
 #Simple Snake Game
-import pygame, sys, time, snake, food
+import pygame, sys, time, snake, food, menu
   
 class Game:
     #Init Frame Size
@@ -15,6 +15,8 @@ class Game:
     amount_of_food = 10
     food = food.Food(frame_size_x, frame_size_y, amount_of_food)
     snake = snake.Snake()
+    menu = menu.Menu()
+    score = 0
     
     has_eaten = False
     
@@ -54,6 +56,8 @@ class Game:
             self.snake.change_direction()
             
             self.has_eaten = self.snake.eat(self.food)
+            if self.has_eaten:
+                self.menu.increment_score()
             #move snake
             self.snake.move(self.has_eaten, self.frame_size_x, self.frame_size_y)
             #spawn food
@@ -77,6 +81,11 @@ class Game:
             #Draw Food
             for e in self.food.elements:
                 pygame.draw.rect(self.game_window, self.red, pygame.Rect(e[0], e[1], 10, 10))
+                
+            #font = pygame.font.SysFont('arial', 20)
+            #surface = font.render('Score : ' + str(self.score), True, self.red)
+            #self.game_window.blit(surface, (100, 100))
+            self.menu.display_score(self.game_window)    
                 
             pygame.display.update()
             self.fps_controller.tick(self.snake.speed)
