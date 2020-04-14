@@ -1,2 +1,4 @@
-# simple-snake-game (04/2020)
-A very simple snake game. Writte in python, used pygame.
+# simple-snake-game
+A very simple snake game. Written in python, used pygame.
+
+04/2020
