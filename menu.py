@@ -26,7 +26,7 @@ class Menu:
         game_window.fill(self.black)
         game_window.blit(surface, (10, 10))
         pygame.display.flip()
-        time.sleep(30)
+        time.sleep(3)
         pygame.quit()
         
     
