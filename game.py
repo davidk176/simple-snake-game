@@ -1,5 +1,5 @@
 #Simple Snake Game
-import pygame, sys, time, snake, food
+import pygame, sys, time, snake, food, menu
   
 class Game:
     #Init Frame Size
@@ -15,6 +15,8 @@ class Game:
     amount_of_food = 10
     food = food.Food(frame_size_x, frame_size_y, amount_of_food)
     snake = snake.Snake()
+    menu = menu.Menu()
+    score = 0
     
     has_eaten = False
     
@@ -54,6 +56,8 @@ class Game:
             self.snake.change_direction()
             
             self.has_eaten = self.snake.eat(self.food)
+            if self.has_eaten:
+                self.menu.increment_score()
             #move snake
             self.snake.move(self.has_eaten, self.frame_size_x, self.frame_size_y)
             #spawn food
@@ -61,14 +65,7 @@ class Game:
             self.game_window.fill(self.black)
             #check if snake eats body
             if self.snake.check_collision():
-                font = pygame.font.SysFont('times new roman', 90)
-                surface = font.render('YOU DIED', True, self.red)
-                rect = surface.get_rect()
-                self.game_window.fill(self.black)
-                self.game_window.blit(surface, rect)
-                pygame.display.flip()
-                time.sleep(3)
-                pygame.quit()
+                self.menu.display_game_over(self.game_window)
             #Draw Snake
             for pos in self.snake.body:
             # Snake body
@@ -77,6 +74,11 @@ class Game:
             #Draw Food
             for e in self.food.elements:
                 pygame.draw.rect(self.game_window, self.red, pygame.Rect(e[0], e[1], 10, 10))
+                
+            #font = pygame.font.SysFont('arial', 20)
+            #surface = font.render('Score : ' + str(self.score), True, self.red)
+            #self.game_window.blit(surface, (100, 100))
+            self.menu.display_score(self.game_window)    
                 
             pygame.display.update()
             self.fps_controller.tick(self.snake.speed)
