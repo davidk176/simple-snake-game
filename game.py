@@ -65,14 +65,7 @@ class Game:
             self.game_window.fill(self.black)
             #check if snake eats body
             if self.snake.check_collision():
-                font = pygame.font.SysFont('times new roman', 90)
-                surface = font.render('YOU DIED', True, self.red)
-                rect = surface.get_rect()
-                self.game_window.fill(self.black)
-                self.game_window.blit(surface, rect)
-                pygame.display.flip()
-                time.sleep(3)
-                pygame.quit()
+                self.menu.display_game_over(self.game_window)
             #Draw Snake
             for pos in self.snake.body:
             # Snake body
